@@ -1,0 +1,133 @@
+/* General styles for the Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #2c3e50;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 60px; /* Set the height of the navbar */
+    box-sizing: border-box;
+}
+
+/* Add padding to the body or container to avoid overlap */
+body {
+    margin: 0;
+    padding-top: 60px; /* Match the height of the navbar */
+}
+
+/* Styling for the logo or app title */
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-left .logo {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ecf0f1;
+    transition: color 0.3s;
+}
+
+.navbar-left .logo:hover {
+    color: #1abc9c;
+}
+
+/* Styling for the right side of the navbar (user info and buttons) */
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+/* User info (email display) */
+.navbar-right span {
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Styling for the buttons in the navbar */
+.navbar-right button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.navbar-right .login-button {
+    background-color: #3498db;
+    color: white;
+}
+
+.navbar-right .login-button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+.navbar-right .logout-button {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.navbar-right .logout-button:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Mobile responsiveness - adjust layout for smaller screens */
+@media (max-width: 768px) {
+    /* Stack elements vertically on small screens */
+    .navbar {
+        flex-direction: column;
+        padding: 10px 20px;
+    }
+
+    .navbar-left {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .navbar-right {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .navbar-right span {
+        margin-bottom: 10px;
+    }
+
+    .navbar-right button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    body {
+        padding-top: 80px; /* Increase padding for mobile if necessary */
+    }
+}
+
+/* For very small screens (below 480px), adjust navbar further */
+@media (max-width: 480px) {
+    .navbar-left .logo {
+        font-size: 20px;
+    }
+
+    .navbar-right span {
+        font-size: 14px;
+    }
+
+    .navbar-right button {
+        font-size: 12px;
+        padding: 8px 15px;
+    }
+}
