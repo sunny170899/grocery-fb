@@ -19,7 +19,7 @@
 /* Add padding to the body or container to avoid overlap */
 body {
     margin: 0;
-    padding-top: 60px; /* Match the height of the navbar */
+    padding-top: 100px; /* Match the height of the navbar */
 }
 
 /* Styling for the logo or app title */

@@ -113,9 +113,9 @@ const SearchPage = () => {
                         <img src={product.img} alt={product.name} className="product-image" />
                         <p>Price: {product.price}</p>
                         <p>
-                            {product.available === 0
-                                ? 'Out of Stock'
-                                : `Stock: ${product.available}`}
+                            {product.available-getCartQuantity(product.id) >= 10
+                                ? 'Available'
+                                : `Stock: ${product.available-getCartQuantity(product.id)}`}
                         </p>
                         {isInCart(product.id) ? (
                             <div className="quantity-controls">
