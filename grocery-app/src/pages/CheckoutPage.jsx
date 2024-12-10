@@ -59,19 +59,19 @@ const CheckoutPage = () => {
 
         // Calculate subtotals and apply discounts
         cart.forEach((item) => {
-            const itemTotal = item.quantity * parseInt(item.price.replace(/\D/g, ''), 10);
+            const itemTotal = item.quantity * parseInt(item.price.replace(/\D/g, ''), 10)/100;
             subtotal += itemTotal;
 
             // Discounts for Coca-Cola
             if (item.name === 'Coca-Cola' && item.quantity >= 6) {
                 const freeCans = Math.floor(item.quantity / 6);
-                discount += freeCans * parseInt(item.price.replace(/\D/g, ''), 10);
+                discount += freeCans * parseInt(item.price.replace(/\D/g, ''), 10)/100;
             }
 
             // Discounts for Croissants
             if (item.name === 'Croissants' && item.quantity >= 3) {
                 const freeCoffee = Math.floor(item.quantity / 3);
-                discount += freeCoffee *  parseInt(item.price.replace(/\D/g, ''), 10);
+                discount += freeCoffee *  parseInt(item.price.replace(/\D/g, ''), 10)/100;
             }
         });
 
@@ -93,7 +93,7 @@ const CheckoutPage = () => {
                                 <img src={item.img} alt={item.name} className="cart-item-image" />
                                 <div className="cart-item-details">
                                     <p>{item.name}</p>
-                                    <p>Price: €{parseInt(item.price.replace(/\D/g, ''), 10)}</p>
+                                    <p>Price: €{parseInt(item.price.replace(/\D/g, ''), 10)/100}</p>
                                     <div className="quantity-controls">
                                         <button onClick={() => handleSubtract(item.id)}>-</button>
                                         <span>{getCartQuantity(item.id)}</span>
@@ -101,7 +101,7 @@ const CheckoutPage = () => {
                                     </div>
                                     <p>
                                         Item Total: €
-                                        {(item.quantity * parseInt(item.price.replace(/\D/g, ''), 10)).toFixed(2)}
+                                        {(item.quantity * parseInt(item.price.replace(/\D/g, ''), 10)/100).toFixed(2)}
                                     </p>
                                 </div>
                             </div>
