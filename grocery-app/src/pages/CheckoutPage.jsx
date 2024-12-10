@@ -94,24 +94,31 @@ const CheckoutPage = () => {
 
         // Calculate subtotals and apply discounts
         cart.forEach((item) => {
-            const itemTotal = item.quantity * parseInt(item.price.replace(/\D/g, ''), 10)/100;
+            const itemTotal = item.quantity * parseInt(item.price.replace(/\D/g, ''), 10) / 100;
             subtotal += itemTotal;
 
             // Discounts for Coca-Cola
             if (item.name === 'Coca-Cola' && item.quantity >= 6) {
                 const freeCans = Math.floor(item.quantity / 6);
-                discount += freeCans * parseInt(item.price.replace(/\D/g, ''), 10)/100;
+                discount += freeCans * parseInt(item.price.replace(/\D/g, ''), 10) / 100;
             }
 
             // Discounts for Croissants
             if (item.name === 'Croissants' && item.quantity >= 3) {
                 const freeCoffee = Math.floor(item.quantity / 3);
-                discount += freeCoffee *  parseInt(item.price.replace(/\D/g, ''), 10)/100;
+                discount += freeCoffee * parseInt(item.price.replace(/\D/g, ''), 10) / 100;
             }
         });
 
         setTotals({ subtotal, discount, total: subtotal - discount });
     };
+    const handleRemove = (itemId) => {
+        // Remove item with matching ID from the cart
+        const updatedCart = cart.filter(item => item.id !== itemId);
+        setCart(updatedCart); // Assuming setCart updates the cart state
+    };
+    
+
 
     return (
         <div className="checkout-container">
@@ -154,9 +161,12 @@ const CheckoutPage = () => {
                     ))
                 ) : (
                     <p>You can add more products.</p>
+                    
                 )}
             </div>
-
+            <button className="back-button" onClick={() => navigate('/')}>
+                Back to Products
+            </button>
             <h2>Checkout</h2>
             {cart.length === 0 ? (
                 <p>Your cart is empty. Add items to continue shopping.</p>
@@ -168,7 +178,6 @@ const CheckoutPage = () => {
                                 <img src={item.img} alt={item.name} className="cart-item-image" />
                                 <div className="cart-item-details">
                                     <p>{item.name}</p>
-                                    {/* <p>Price: €{parseInt(item.price.replace(/\D/g, ''), 10)/100}</p> */}
                                     <div className="quantity-controls">
                                         <button onClick={() => handleSubtract(item.id)}>-</button>
                                         <span>{getCartQuantity(item.id)}</span>
@@ -176,12 +185,21 @@ const CheckoutPage = () => {
                                     </div>
                                     <p>
                                         €
-                                        {(item.quantity * parseInt(item.price.replace(/\D/g, ''), 10)/100).toFixed(2)}
+                                        {(item.quantity * parseInt(item.price.replace(/\D/g, ''), 10) / 100).toFixed(2)}
                                     </p>
+                                    {/* Cross button to remove item */}
+                                    <button
+                                        className="remove-item-btn"
+                                        onClick={() => handleRemove(item.id)}
+                                        aria-label="Remove item"
+                                    >
+                                        &times; {/* HTML entity for a cross symbol */}
+                                    </button>
                                 </div>
                             </div>
                         ))}
                     </div>
+
                     <div className="totals">
                         <p>Subtotal: €{totals.subtotal.toFixed(2)}</p>
                         <p>Discount: -€{totals.discount.toFixed(2)}</p>
@@ -190,9 +208,7 @@ const CheckoutPage = () => {
                 </>
             )}
 
-            <button className="back-button" onClick={() => navigate('/')}>
-                Back to Products
-            </button>
+            
             {cart.length > 0 && (
                 <button className="checkout-button" onClick={() => alert('Proceeding to Payment')}>
                     Proceed to Payment

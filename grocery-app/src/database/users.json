@@ -1,18 +1,18 @@
 [
     {
-        "email": "shashank@example.com",
-        "password": "password123"
-    },
-    {
         "email": "sayantan@example.com",
         "password": "password123"
     },
     {
-        "email": "bishu@boobs.com",
-        "password": "boobs"
+        "email": "a@a",
+        "password": "a"
     },
     {
-        "email": "b@b",
-        "password": "b"
+        "email": "1@a",
+        "password": "1"
+    },
+    {
+        "email": "123@mail.com",
+        "password": "123"
     }
 ]

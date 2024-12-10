@@ -26,8 +26,18 @@ const Searchbar = ({ searchQuery, setSearchQuery, cart, setCart, user }) => {
         navigate('/checkout'); // Redirect to checkout page
     };
 
-    const isInCart = (productId) => cart.some((item) => item.id === productId);
 
+    const handleOutsideClick = (e) => {
+        // Close the dropdown when clicking outside
+        if (!e.target.closest(".searchbar-item")) {
+            setIsUserHovering(false);
+        }
+    };
+
+    React.useEffect(() => {
+        document.addEventListener("click", handleOutsideClick);
+        return () => document.removeEventListener("click", handleOutsideClick);
+    }, []);
     return (
         <div className="searchbar-container">
             <div className="searchbar-left">
@@ -44,22 +54,24 @@ const Searchbar = ({ searchQuery, setSearchQuery, cart, setCart, user }) => {
             </div>
             <div className="searchbar-right">
                 {/* Favorites */}
-                <div className="searchbar-item" title="Favorites">
+                <div className="searchbar-item" id="Favorites">
                     <FaHeart />
                 </div>
 
                 {/* User Profile */}
                 <div
-                    className="searchbar-item"
+                    className={`searchbar-item ${isUserHovering ? "active" : ""}`}
                     onMouseEnter={() => setIsUserHovering(true)}
-                    onMouseLeave={() => setIsUserHovering(false)}
                 >
-                    <FaUserCircle />
+                    <FaUserCircle className="user-icon" />
                     {isUserHovering && (
                         <div className="searchbar-user-info">
-                            <p>{user?.name}</p>
-                            <p>{user?.email}</p>
-                            <button className="logout-button" onClick={handleLogout}>
+                            <p className="user-name mb-1">{user?.name}</p>
+                            <p className="user-email text-muted mb-2">{user?.email}</p>
+                            <button
+                                className="logout-button"
+                                onClick={handleLogout}
+                            >
                                 Logout
                             </button>
                         </div>

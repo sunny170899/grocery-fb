@@ -100,9 +100,9 @@ const SearchPage = () => {
                 
             />
             <div className="category-selector">
-                <button onClick={() => setCategory('all')}>All</button>
-                <button onClick={() => setCategory('fruit')}>Fruit</button>
+                <button onClick={() => setCategory('all')}>All items</button>
                 <button onClick={() => setCategory('drinks')}>Drinks</button>
+                <button onClick={() => setCategory('fruit')}>Fruit</button>
                 <button onClick={() => setCategory('bakery')}>Bakery</button>
             </div>
             <div className="product-grid">
