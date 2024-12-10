@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
+import Searchbar from '../components/Searchbar';
 import '../styles/shopping.css';
 
 const CheckoutPage = () => {
+    const [products, setProducts] = useState([]); // Stores all products
+    const [filteredProducts, setFilteredProducts] = useState([]); // Stores products based on search query
     const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
     const [totals, setTotals] = useState({ subtotal: 0, discount: 0, total: 0 });
+    const [category, setCategory] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,6 +24,36 @@ const CheckoutPage = () => {
         calculateTotals(cart);
         localStorage.setItem('cart', JSON.stringify(cart)); // Sync cart with localStorage
     }, [cart]);
+
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get(
+                `https://uxdlyqjm9i.execute-api.eu-west-1.amazonaws.com/s?category=${category}`
+            );
+            setProducts(response.data);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    };
+
+    // Fetch products when the category changes
+    useEffect(() => {
+        fetchProducts();
+    }, [category]);
+
+    // Filter products based on search query
+    useEffect(() => {
+        if (searchQuery === '') {
+            setFilteredProducts([]); // Show no products if search is empty
+        } else {
+            const filtered = products.filter((product) =>
+                product.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredProducts(filtered); // Update filtered products
+        }
+    }, [searchQuery, products]);
+
+    const isInCart = (productId) => cart.some((item) => item.id === productId);
 
     const handleAdd = (product) => {
         const existingProduct = cart.find((item) => item.id === product.id);
@@ -53,6 +87,7 @@ const CheckoutPage = () => {
         const item = cart.find((item) => item.id === productId);
         return item ? item.quantity : 0;
     };
+
     const calculateTotals = (cart) => {
         let subtotal = 0;
         let discount = 0;
@@ -79,9 +114,49 @@ const CheckoutPage = () => {
     };
 
     return (
-        
         <div className="checkout-container">
-            <Navbar />
+            <Searchbar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                cart={cart}
+                setCart={setCart}
+                user={JSON.parse(localStorage.getItem('user'))}
+            />
+
+            {/* Display products only if there are filtered products */}
+            <div className="product-grid">
+                {filteredProducts.length > 0 ? (
+                    filteredProducts.map((product) => (
+                        <div key={product.id} className="product-card">
+                            <h3>{product.name}</h3>
+                            <img src={product.img} alt={product.name} className="product-image" />
+                            <p>Price: {product.price}</p>
+                            <p>
+                                {product.available - getCartQuantity(product.id) >= 10
+                                    ? 'Available'
+                                    : `Stock: ${product.available - getCartQuantity(product.id)}`}
+                            </p>
+                            {isInCart(product.id) ? (
+                                <div className="quantity-controls">
+                                    <button onClick={() => handleSubtract(product.id)}>-</button>
+                                    <span>{getCartQuantity(product.id)}</span>
+                                    <button onClick={() => handleAdd(product)}>+</button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => handleAdd(product)}
+                                    disabled={product.available === 0}
+                                >
+                                    Add to Cart
+                                </button>
+                            )}
+                        </div>
+                    ))
+                ) : (
+                    <p>You can add more products.</p>
+                )}
+            </div>
+
             <h2>Checkout</h2>
             {cart.length === 0 ? (
                 <p>Your cart is empty. Add items to continue shopping.</p>
@@ -93,14 +168,14 @@ const CheckoutPage = () => {
                                 <img src={item.img} alt={item.name} className="cart-item-image" />
                                 <div className="cart-item-details">
                                     <p>{item.name}</p>
-                                    <p>Price: €{parseInt(item.price.replace(/\D/g, ''), 10)/100}</p>
+                                    {/* <p>Price: €{parseInt(item.price.replace(/\D/g, ''), 10)/100}</p> */}
                                     <div className="quantity-controls">
                                         <button onClick={() => handleSubtract(item.id)}>-</button>
                                         <span>{getCartQuantity(item.id)}</span>
                                         <button onClick={() => handleAdd(item)}>+</button>
                                     </div>
                                     <p>
-                                        Item Total: €
+                                        €
                                         {(item.quantity * parseInt(item.price.replace(/\D/g, ''), 10)/100).toFixed(2)}
                                     </p>
                                 </div>
@@ -114,6 +189,7 @@ const CheckoutPage = () => {
                     </div>
                 </>
             )}
+
             <button className="back-button" onClick={() => navigate('/')}>
                 Back to Products
             </button>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from '../components/Navbar'; // Import the Navbar component
+import Searchbar from '../components/Searchbar'; // Import the Navbar component
 import '../styles/shopping.css';
 
 const SearchPage = () => {
@@ -87,19 +87,18 @@ const SearchPage = () => {
         const item = cart.find((item) => item.id === productId);
         return item ? item.quantity : 0;
     };
-
+    
     return (
         <div className="shopping-container">
-            <Navbar /> {/* Add Navbar */}
-            <h2>Product Search</h2>
-            <div className="search-bar">
-                <input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-            </div>
+            
+            <Searchbar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                cart={cart}
+                setCart={setCart}
+                user={JSON.parse(localStorage.getItem('user'))}
+                
+            />
             <div className="category-selector">
                 <button onClick={() => setCategory('all')}>All</button>
                 <button onClick={() => setCategory('fruit')}>Fruit</button>
@@ -134,9 +133,7 @@ const SearchPage = () => {
                     </div>
                 ))}
             </div>
-            <button className="checkout-button" onClick={() => navigate('/checkout')}>
-                Go to Checkout
-            </button>
+           
         </div>
     );
 };
