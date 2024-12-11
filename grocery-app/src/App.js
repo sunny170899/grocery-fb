@@ -8,10 +8,11 @@ import Logout from './components/Logout';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/grocery-fb">
       <Routes>
         {/* Change the default route ("/") to render SearchPage */}
         <Route path="/" element={<SearchPage />} />
+        {/* <Route path="/grocery-fb" element={<SearchPage />} /> */}
         <Route path="/register" element={<Register />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/logout" element={<Logout />} />
