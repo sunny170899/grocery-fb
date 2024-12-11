@@ -1,14 +1,19 @@
 const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const cors = require("cors");
+
 const app = express();
 const PORT = 5000;
-const cors = require("cors");
-const fs = require('fs');
 
 app.use(cors()); // Allow cross-origin requests
 app.use(express.json());
 
+// Serve static files from the build folder
+app.use(express.static(path.join(__dirname, 'build')));
+
 // Mock user database
-const usersDbPath = '../database/users.json';
+const usersDbPath = path.join(__dirname, './database/users.json');
 const carts = {}; // In-memory session-based cart storage
 
 // Helper function to load users from file
@@ -67,7 +72,6 @@ app.post('/register', (req, res) => {
     }
 });
 
-
 // Fetch Cart for User
 app.get('/cart', (req, res) => {
     const { email } = req.query;
@@ -93,5 +97,12 @@ app.post('/cart', (req, res) => {
     return res.status(200).json({ message: 'Cart updated successfully' });
 });
 
-// Server listening on port 5000
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Route all other requests to React's index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});

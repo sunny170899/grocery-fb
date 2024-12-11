@@ -13,12 +13,7 @@ const CheckoutPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const user = localStorage.getItem('user');
-        if (!user) {
-            navigate('/');
-        }
-    }, [navigate]);
+
 
     useEffect(() => {
         calculateTotals(cart);

@@ -64,7 +64,7 @@ const Searchbar = ({ searchQuery, setSearchQuery, cart, setCart, user }) => {
                     onMouseEnter={() => setIsUserHovering(true)}
                 >
                     <FaUserCircle className="user-icon" />
-                    {isUserHovering && (
+                    {/* {isUserHovering && (
                         <div className="searchbar-user-info">
                             <p className="user-name mb-1">{user?.name}</p>
                             <p className="user-email text-muted mb-2">{user?.email}</p>
@@ -75,7 +75,7 @@ const Searchbar = ({ searchQuery, setSearchQuery, cart, setCart, user }) => {
                                 Logout
                             </button>
                         </div>
-                    )}
+                    )} */}
                 </div>
 
                 {/* Cart */}
